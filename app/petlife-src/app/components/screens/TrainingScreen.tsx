@@ -58,7 +58,7 @@ export function TrainingScreen() {
   const [selectedSkill, setSelectedSkill] = useState<number | null>(null);
 
   return (
-    <div className="min-h-full bg-gradient-to-b from-[#F7F5F2] to-[#FFF9F0]">
+    <div className="h-full min-h-0 overflow-y-auto overscroll-contain bg-gradient-to-b from-[#F7F5F2] to-[#FFF9F0]">
       {/* Header */}
       <div className="px-6 pt-8 pb-6 flex items-center gap-3">
         <button
@@ -74,7 +74,7 @@ export function TrainingScreen() {
       </div>
 
       {/* Content */}
-      <div className="px-6 pb-6 space-y-6">
+      <div className="px-6 pb-10 space-y-6">
         {/* AI Training Scheduler - AI Doctor Style */}
         <div className="flex items-end gap-3">
           {/* Chat bubble */}

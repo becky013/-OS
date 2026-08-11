@@ -38,7 +38,7 @@ export function PreparationScreen() {
   };
 
   return (
-    <div className="min-h-full bg-gradient-to-b from-[#F7F5F2] to-[#FFF9F0]">
+    <div className="h-full min-h-0 overflow-y-auto overscroll-contain bg-gradient-to-b from-[#F7F5F2] to-[#FFF9F0]">
       {/* Header */}
       <div className="px-6 pt-8 pb-6 flex items-center gap-3">
         <button
@@ -54,7 +54,7 @@ export function PreparationScreen() {
       </div>
 
       {/* Content */}
-      <div className="px-6 pb-6 space-y-6">
+      <div className="px-6 pb-10 space-y-6">
         {/* Checklist */}
         <div className="bg-white rounded-3xl p-5 shadow-sm">
           <h2 className="text-lg font-medium text-[#8B7355] mb-4">Essential Checklist</h2>
