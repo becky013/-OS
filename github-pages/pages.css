@@ -1,4 +1,10 @@
+/* Frozen Tailwind snapshot exported from Figma - keeps the original base styles */
 @import "../app/petlife.css";
+/* Live Tailwind utilities so newly added classes are generated.
+   Preflight is intentionally omitted: petlife.css already ships its own base layer. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@source "../app/petlife-src";
 
 :root {
   --ink: #4b392f;

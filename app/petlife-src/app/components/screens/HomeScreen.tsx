@@ -4,6 +4,7 @@ import { Heart, Droplets, Footprints, Mic, Send, X, ChevronDown, ChevronUp } fro
 import { motion, AnimatePresence } from "motion/react";
 import corgiImage from "../../../assets/35cb47e2d1ed49b7b322120b4f718b3123eea65e.png";
 import aiDoctorImage from "../../../assets/aec2c9b15174a8e2b44b7db9dc41e225cd83f842.png";
+import { useLanguage } from "../../i18n";
 
 type PetMood = "happy" | "normal" | "tired" | "warning";
 
@@ -15,6 +16,7 @@ interface ChatMessage {
 }
 
 export function HomeScreen() {
+  const { t, lang, setLang } = useLanguage();
   const [petMood, setPetMood] = useState<PetMood>("happy");
   const [logs, setLogs] = useState({
     feed: 2,
@@ -23,13 +25,33 @@ export function HomeScreen() {
   });
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isFeedModalOpen, setIsFeedModalOpen] = useState(false);
+  const [isWaterModalOpen, setIsWaterModalOpen] = useState(false);
+  const [isPottyModalOpen, setIsPottyModalOpen] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showWaterAdvanced, setShowWaterAdvanced] = useState(false);
+  const [showPottyAdvanced, setShowPottyAdvanced] = useState(false);
   const [feedingData, setFeedingData] = useState({
     time: "",
     foodType: "",
     portion: "",
     reaction: "",
     exactGrams: "",
+    notes: "",
+  });
+  const [waterData, setWaterData] = useState({
+    time: "",
+    source: "",
+    amount: "",
+    behavior: "",
+    exactMl: "",
+    notes: "",
+  });
+  const [pottyData, setPottyData] = useState({
+    time: "",
+    type: "",
+    location: "",
+    consistency: "",
+    color: "",
     notes: "",
   });
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -48,8 +70,11 @@ export function HomeScreen() {
       setIsFeedModalOpen(true);
       return;
     }
-    setLogs((prev) => ({ ...prev, [type]: prev[type] + 1 }));
-    setPetMood("happy");
+    if (type === "water") {
+      setIsWaterModalOpen(true);
+      return;
+    }
+    setIsPottyModalOpen(true);
   };
 
   const handleSendMessage = () => {
@@ -98,7 +123,7 @@ export function HomeScreen() {
 
   const handleVoiceInput = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert("Voice input is not supported in your browser. Please try Chrome or Edge.");
+      alert(t("Voice input is not supported in your browser. Please try Chrome or Edge."));
       return;
     }
 
@@ -144,9 +169,27 @@ export function HomeScreen() {
       className="h-full flex flex-col bg-gradient-to-b from-[#F7F5F2] to-[#FFF4CC] overflow-hidden"
     >
       {/* Minimal Header */}
-      <div className="pt-6 pb-3 px-6 text-center flex-shrink-0">
+      <div className="pt-6 pb-3 px-6 text-center flex-shrink-0 relative">
         <h2 className="text-lg font-medium text-[#8B7355]">Mochi</h2>
-        <p className="text-xs text-[#B8A89A] mt-0.5">3–6 months old</p>
+        <p className="text-xs text-[#B8A89A] mt-0.5">{t("3–6 months old")}</p>
+
+        {/* Language switch */}
+        <div className="absolute right-5 top-5 flex items-center gap-0.5 bg-white/70 backdrop-blur-sm rounded-full p-0.5 shadow-sm border border-white/60">
+          {(["en", "zh"] as const).map((code) => (
+            <button
+              key={code}
+              onClick={() => setLang(code)}
+              aria-label={code === "en" ? "Switch to English" : "切换到中文"}
+              className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
+                lang === code
+                  ? "bg-[#FF9F66] text-white shadow-sm"
+                  : "text-[#8B7355] hover:bg-white/70"
+              }`}
+            >
+              {code === "en" ? "EN" : "中文"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Top Reminder Cards */}
@@ -158,8 +201,8 @@ export function HomeScreen() {
               🍽️
             </div>
             <div className="flex-1">
-              <h4 className="text-xs font-medium text-[#8B7355] mb-0.5">Next Feeding</h4>
-              <p className="text-[10px] text-[#B8A89A]">Recommended at 3:00 PM</p>
+              <h4 className="text-xs font-medium text-[#8B7355] mb-0.5">{t("Next Feeding")}</h4>
+              <p className="text-[10px] text-[#B8A89A]">{t("Recommended at 3:00 PM")}</p>
             </div>
           </div>
         </div>
@@ -171,10 +214,10 @@ export function HomeScreen() {
               📍
             </div>
             <div className="flex-1">
-              <h4 className="text-xs font-medium text-[#8B7355] mb-0.5">Pet Meetup Nearby</h4>
-              <p className="text-[10px] text-[#B8A89A]">Riverside Dog Park • Tomorrow 10:00 AM</p>
+              <h4 className="text-xs font-medium text-[#8B7355] mb-0.5">{t("Pet Meetup Nearby")}</h4>
+              <p className="text-[10px] text-[#B8A89A]">{t("Riverside Dog Park • Tomorrow 10:00 AM")}</p>
             </div>
-            <button className="text-[10px] text-[#FF9F66] font-medium">View</button>
+            <button className="text-[10px] text-[#FF9F66] font-medium">{t("View")}</button>
           </div>
         </div>
       </div>
@@ -185,7 +228,7 @@ export function HomeScreen() {
           {/* Chat bubble */}
           <div className="bg-[#EAF3FF] rounded-3xl rounded-br-sm p-3 shadow-sm border border-[#D4E7FF] max-w-[220px]">
             <p className="text-[11px] text-[#5B7A9E] leading-relaxed">
-              Mochi is doing great today! Consider a short walk after the next meal.
+              {t("Mochi is doing great today! Consider a short walk after the next meal.")}
             </p>
           </div>
           
@@ -256,21 +299,21 @@ export function HomeScreen() {
             className="flex flex-col items-center gap-2 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-3xl hover:bg-white/80 transition-all shadow-sm"
           >
             <Heart className="w-5 h-5 text-[#FF9F66]" strokeWidth={1.5} />
-            <span className="text-xs font-medium text-[#8B7355]">Feed</span>
+            <span className="text-xs font-medium text-[#8B7355]">{t("Feed")}</span>
           </button>
           <button
             onClick={() => handleLog("water")}
             className="flex flex-col items-center gap-2 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-3xl hover:bg-white/80 transition-all shadow-sm"
           >
             <Droplets className="w-5 h-5 text-[#64B5F6]" strokeWidth={1.5} />
-            <span className="text-xs font-medium text-[#8B7355]">Water</span>
+            <span className="text-xs font-medium text-[#8B7355]">{t("Water")}</span>
           </button>
           <button
             onClick={() => handleLog("potty")}
             className="flex flex-col items-center gap-2 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-3xl hover:bg-white/80 transition-all shadow-sm"
           >
             <Footprints className="w-5 h-5 text-[#AB47BC]" strokeWidth={1.5} />
-            <span className="text-xs font-medium text-[#8B7355]">Potty</span>
+            <span className="text-xs font-medium text-[#8B7355]">{t("Potty")}</span>
           </button>
         </div>
       </div>
@@ -304,8 +347,8 @@ export function HomeScreen() {
                     />
                   </div>
                   <div>
-                    <h3 className="text-base font-medium text-[#8B7355]">AI Pet Doctor</h3>
-                    <p className="text-xs text-[#B8A89A]">Always here to help</p>
+                    <h3 className="text-base font-medium text-[#8B7355]">{t("AI Pet Doctor")}</h3>
+                    <p className="text-xs text-[#B8A89A]">{t("Always here to help")}</p>
                   </div>
                 </div>
                 <button
@@ -330,7 +373,7 @@ export function HomeScreen() {
                           : "bg-[#EAF3FF] text-[#5B7A9E] rounded-bl-sm"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed">{message.text}</p>
+                      <p className="text-sm leading-relaxed">{t(message.text)}</p>
                     </div>
                   </div>
                 ))}
@@ -355,7 +398,7 @@ export function HomeScreen() {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                    placeholder="Ask about Mochi's care..."
+                    placeholder={t("Ask about Mochi's care...")}
                     className="flex-1 px-4 py-3 rounded-2xl bg-white border border-gray-200 focus:outline-none focus:border-[#FF9F66] text-sm"
                   />
                   <button
@@ -367,7 +410,7 @@ export function HomeScreen() {
                   </button>
                 </div>
                 <p className="text-xs text-gray-400 mt-2 text-center">
-                  {isListening ? "Listening..." : "Tap mic for voice, or type your question"}
+                  {isListening ? t("Listening...") : t("Tap mic for voice, or type your question")}
                 </p>
               </div>
             </motion.div>
@@ -399,8 +442,8 @@ export function HomeScreen() {
                   <div className="flex items-center gap-3">
                     <Heart className="w-6 h-6" />
                     <div>
-                      <h3 className="text-lg font-semibold">Feeding Record</h3>
-                      <p className="text-xs opacity-90">Log Mochi's meal</p>
+                      <h3 className="text-lg font-semibold">{t("Feeding Record")}</h3>
+                      <p className="text-xs opacity-90">{t("Log Mochi's meal")}</p>
                     </div>
                   </div>
                   <button
@@ -417,7 +460,7 @@ export function HomeScreen() {
                 {/* ① Time */}
                 <div>
                   <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
-                    ① Time
+                    {t("① Time")}
                   </label>
                   <input
                     type="time"
@@ -430,14 +473,14 @@ export function HomeScreen() {
                 {/* ② Food Type */}
                 <div>
                   <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
-                    ② Food Type
+                    {t("② Food Type")}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { value: "dry", label: "Dry Food", emoji: "🥘" },
-                      { value: "wet", label: "Wet Food", emoji: "🥫" },
-                      { value: "mixed", label: "Mixed", emoji: "🍱" },
-                      { value: "treats", label: "Treats/Rewards", emoji: "🦴" },
+                      { value: "dry", label: t("Dry Food"), emoji: "🥘" },
+                      { value: "wet", label: t("Wet Food"), emoji: "🥫" },
+                      { value: "mixed", label: t("Mixed"), emoji: "🍱" },
+                      { value: "treats", label: t("Treats/Rewards"), emoji: "🦴" },
                     ].map((type) => (
                       <button
                         key={type.value}
@@ -458,13 +501,13 @@ export function HomeScreen() {
                 {/* ③ Portion */}
                 <div>
                   <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
-                    ③ Portion
+                    {t("③ Portion")}
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { value: "small", label: "Small", emoji: "🥄" },
-                      { value: "normal", label: "Normal", emoji: "🍽️" },
-                      { value: "large", label: "Large", emoji: "🍴" },
+                      { value: "small", label: t("Small"), emoji: "🥄" },
+                      { value: "normal", label: t("Normal"), emoji: "🍽️" },
+                      { value: "large", label: t("Large"), emoji: "🍴" },
                     ].map((portion) => (
                       <button
                         key={portion.value}
@@ -489,7 +532,7 @@ export function HomeScreen() {
                     className="w-full flex items-center justify-between p-3 bg-[#FFF9F0] rounded-xl hover:bg-[#FFE8D6] transition-colors"
                   >
                     <span className="text-sm font-medium text-[#6B5B4F]">
-                      Advanced Options (Optional)
+                      {t("Advanced Options (Optional)")}
                     </span>
                     {showAdvanced ? (
                       <ChevronUp className="w-5 h-5 text-[#A08B7E]" />
@@ -511,14 +554,14 @@ export function HomeScreen() {
                           {/* Pet's Eating Reaction */}
                           <div>
                             <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
-                              Mochi's Eating Reaction
+                              {t("Mochi's Eating Reaction")}
                             </label>
                             <div className="grid grid-cols-2 gap-2">
                               {[
-                                { value: "excited", label: "Excited", emoji: "😋" },
-                                { value: "finished", label: "Finished", emoji: "😊" },
-                                { value: "half", label: "Half Eaten", emoji: "😐" },
-                                { value: "barely", label: "Barely Touched", emoji: "😕" },
+                                { value: "excited", label: t("Excited"), emoji: "😋" },
+                                { value: "finished", label: t("Finished"), emoji: "😊" },
+                                { value: "half", label: t("Half Eaten"), emoji: "😐" },
+                                { value: "barely", label: t("Barely Touched"), emoji: "😕" },
                               ].map((reaction) => (
                                 <button
                                   key={reaction.value}
@@ -539,14 +582,14 @@ export function HomeScreen() {
                           {/* Exact Grams */}
                           <div>
                             <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
-                              Exact Weight (grams)
+                              {t("Exact Weight (grams)")}
                             </label>
                             <div className="relative">
                               <input
                                 type="number"
                                 value={feedingData.exactGrams}
                                 onChange={(e) => setFeedingData({ ...feedingData, exactGrams: e.target.value })}
-                                placeholder="e.g., 150"
+                                placeholder={t("e.g., 150")}
                                 className="w-full px-4 py-3 pr-12 bg-[#FFF9F0] border border-[#E8D5BF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9F66] text-sm"
                               />
                               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#A08B7E]">
@@ -558,12 +601,12 @@ export function HomeScreen() {
                           {/* Notes */}
                           <div>
                             <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
-                              Notes
+                              {t("Notes")}
                             </label>
                             <textarea
                               value={feedingData.notes}
                               onChange={(e) => setFeedingData({ ...feedingData, notes: e.target.value })}
-                              placeholder="e.g., Fed treats from another house..."
+                              placeholder={t("e.g., Fed treats from another house...")}
                               rows={3}
                               className="w-full px-4 py-3 bg-[#FFF9F0] border border-[#E8D5BF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF9F66] text-sm resize-none"
                             />
@@ -595,7 +638,475 @@ export function HomeScreen() {
                   className="w-full bg-gradient-to-r from-[#FF9F66] to-[#FFB088] text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Heart className="w-5 h-5" />
-                  Save Feeding Record
+                  {t("Save Feeding Record")}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Water Modal */}
+      <AnimatePresence>
+        {isWaterModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end"
+            onClick={() => setIsWaterModalOpen(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="w-full bg-white rounded-t-[2rem] shadow-2xl max-h-[85vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-gradient-to-r from-[#64B5F6] to-[#90CAF9] px-6 py-4 text-white z-10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Droplets className="w-6 h-6" />
+                    <div>
+                      <h3 className="text-lg font-semibold">{t("Water Record")}</h3>
+                      <p className="text-xs opacity-90">{t("Log Mochi's drink")}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsWaterModalOpen(false)}
+                    className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              <div className="px-6 py-6 space-y-6">
+                {/* ① Time */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
+                    {t("① Time")}
+                  </label>
+                  <input
+                    type="time"
+                    value={waterData.time}
+                    onChange={(e) => setWaterData({ ...waterData, time: e.target.value })}
+                    className="w-full px-4 py-3 bg-[#F5FAFF] border border-[#CFE5FA] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#64B5F6] text-sm"
+                  />
+                </div>
+
+                {/* ② Source */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                    {t("② Water Source")}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: "bowl", label: t("Bowl"), emoji: "🥣" },
+                      { value: "fountain", label: t("Fountain"), emoji: "⛲" },
+                      { value: "bottle", label: t("Bottle"), emoji: "🍼" },
+                      { value: "food", label: t("From Food"), emoji: "🥫" },
+                    ].map((source) => (
+                      <button
+                        key={source.value}
+                        onClick={() => setWaterData({ ...waterData, source: source.value })}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all ${
+                          waterData.source === source.value
+                            ? "border-[#64B5F6] bg-[#E3F2FD] text-[#3B8FD4]"
+                            : "border-[#CFE5FA] bg-[#F5FAFF] text-[#6B5B4F] hover:border-[#64B5F6]"
+                        }`}
+                      >
+                        <span className="text-xl">{source.emoji}</span>
+                        <span className="text-sm font-medium">{source.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ③ Amount */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                    {t("③ Amount")}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { value: "sip", label: t("A Few Sips"), emoji: "💧" },
+                      { value: "normal", label: t("Normal"), emoji: "💦" },
+                      { value: "lots", label: t("A Lot"), emoji: "🌊" },
+                    ].map((amount) => (
+                      <button
+                        key={amount.value}
+                        onClick={() => setWaterData({ ...waterData, amount: amount.value })}
+                        className={`flex flex-col items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all ${
+                          waterData.amount === amount.value
+                            ? "border-[#64B5F6] bg-[#E3F2FD] text-[#3B8FD4]"
+                            : "border-[#CFE5FA] bg-[#F5FAFF] text-[#6B5B4F] hover:border-[#64B5F6]"
+                        }`}
+                      >
+                        <span className="text-2xl">{amount.emoji}</span>
+                        <span className="text-xs font-medium text-center">{amount.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Advanced Section */}
+                <div className="border-t border-[#CFE5FA] pt-4">
+                  <button
+                    onClick={() => setShowWaterAdvanced(!showWaterAdvanced)}
+                    className="w-full flex items-center justify-between p-3 bg-[#F5FAFF] rounded-xl hover:bg-[#E3F2FD] transition-colors"
+                  >
+                    <span className="text-sm font-medium text-[#6B5B4F]">
+                      {t("Advanced Options (Optional)")}
+                    </span>
+                    {showWaterAdvanced ? (
+                      <ChevronUp className="w-5 h-5 text-[#7FA8C9]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#7FA8C9]" />
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {showWaterAdvanced && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-4 space-y-5">
+                          {/* Drinking Behaviour */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                              {t("Mochi's Drinking Behaviour")}
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {[
+                                { value: "eager", label: t("Eager"), emoji: "😃" },
+                                { value: "normal", label: t("Normal"), emoji: "🙂" },
+                                { value: "reluctant", label: t("Reluctant"), emoji: "😐" },
+                                { value: "refused", label: t("Refused"), emoji: "😕" },
+                              ].map((behavior) => (
+                                <button
+                                  key={behavior.value}
+                                  onClick={() => setWaterData({ ...waterData, behavior: behavior.value })}
+                                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border transition-all ${
+                                    waterData.behavior === behavior.value
+                                      ? "border-[#64B5F6] bg-[#E3F2FD] text-[#3B8FD4]"
+                                      : "border-[#CFE5FA] bg-[#F5FAFF] text-[#6B5B4F] hover:border-[#64B5F6]"
+                                  }`}
+                                >
+                                  <span className="text-lg">{behavior.emoji}</span>
+                                  <span className="text-xs font-medium">{behavior.label}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Exact Volume */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
+                              {t("Exact Volume (ml)")}
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="number"
+                                value={waterData.exactMl}
+                                onChange={(e) => setWaterData({ ...waterData, exactMl: e.target.value })}
+                                placeholder={t("e.g., 120")}
+                                className="w-full px-4 py-3 pr-12 bg-[#F5FAFF] border border-[#CFE5FA] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#64B5F6] text-sm"
+                              />
+                              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-[#7FA8C9]">
+                                ml
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Notes */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
+                              {t("Notes")}
+                            </label>
+                            <textarea
+                              value={waterData.notes}
+                              onChange={(e) => setWaterData({ ...waterData, notes: e.target.value })}
+                              placeholder={t("e.g., Drank a lot after the afternoon walk...")}
+                              rows={3}
+                              className="w-full px-4 py-3 bg-[#F5FAFF] border border-[#CFE5FA] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#64B5F6] text-sm resize-none"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Submit */}
+                <button
+                  onClick={() => {
+                    setLogs((prev) => ({ ...prev, water: prev.water + 1 }));
+                    setPetMood("happy");
+                    setIsWaterModalOpen(false);
+                    setShowWaterAdvanced(false);
+                    setWaterData({
+                      time: "",
+                      source: "",
+                      amount: "",
+                      behavior: "",
+                      exactMl: "",
+                      notes: "",
+                    });
+                  }}
+                  disabled={!waterData.time || !waterData.source || !waterData.amount}
+                  className="w-full bg-gradient-to-r from-[#64B5F6] to-[#90CAF9] text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Droplets className="w-5 h-5" />
+                  {t("Save Water Record")}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Potty Modal */}
+      <AnimatePresence>
+        {isPottyModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end"
+            onClick={() => setIsPottyModalOpen(false)}
+          >
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="w-full bg-white rounded-t-[2rem] shadow-2xl max-h-[85vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="sticky top-0 bg-gradient-to-r from-[#AB47BC] to-[#CE93D8] px-6 py-4 text-white z-10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Footprints className="w-6 h-6" />
+                    <div>
+                      <h3 className="text-lg font-semibold">{t("Potty Record")}</h3>
+                      <p className="text-xs opacity-90">{t("Log Mochi's bathroom break")}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsPottyModalOpen(false)}
+                    className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              <div className="px-6 py-6 space-y-6">
+                {/* ① Time */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
+                    {t("① Time")}
+                  </label>
+                  <input
+                    type="time"
+                    value={pottyData.time}
+                    onChange={(e) => setPottyData({ ...pottyData, time: e.target.value })}
+                    className="w-full px-4 py-3 bg-[#FCF7FD] border border-[#E9D3EF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#AB47BC] text-sm"
+                  />
+                </div>
+
+                {/* ② Type */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                    {t("② Type")}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: "pee", label: t("Pee"), emoji: "💧" },
+                      { value: "poop", label: t("Poop"), emoji: "💩" },
+                      { value: "both", label: t("Both"), emoji: "🚽" },
+                      { value: "attempt", label: t("Tried, Nothing"), emoji: "🤔" },
+                    ].map((type) => (
+                      <button
+                        key={type.value}
+                        onClick={() => setPottyData({ ...pottyData, type: type.value })}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all ${
+                          pottyData.type === type.value
+                            ? "border-[#AB47BC] bg-[#F3E5F5] text-[#8E3BA0]"
+                            : "border-[#E9D3EF] bg-[#FCF7FD] text-[#6B5B4F] hover:border-[#AB47BC]"
+                        }`}
+                      >
+                        <span className="text-xl">{type.emoji}</span>
+                        <span className="text-sm font-medium">{type.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* ③ Location */}
+                <div>
+                  <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                    {t("③ Location")}
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { value: "pad", label: t("Pee Pad"), emoji: "🧻" },
+                      { value: "outdoor", label: t("Outdoors"), emoji: "🌳" },
+                      { value: "accident", label: t("Accident"), emoji: "⚠️" },
+                    ].map((location) => (
+                      <button
+                        key={location.value}
+                        onClick={() => setPottyData({ ...pottyData, location: location.value })}
+                        className={`flex flex-col items-center gap-2 px-3 py-3 rounded-xl border-2 transition-all ${
+                          pottyData.location === location.value
+                            ? "border-[#AB47BC] bg-[#F3E5F5] text-[#8E3BA0]"
+                            : "border-[#E9D3EF] bg-[#FCF7FD] text-[#6B5B4F] hover:border-[#AB47BC]"
+                        }`}
+                      >
+                        <span className="text-2xl">{location.emoji}</span>
+                        <span className="text-xs font-medium text-center">{location.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Advanced Section */}
+                <div className="border-t border-[#E9D3EF] pt-4">
+                  <button
+                    onClick={() => setShowPottyAdvanced(!showPottyAdvanced)}
+                    className="w-full flex items-center justify-between p-3 bg-[#FCF7FD] rounded-xl hover:bg-[#F3E5F5] transition-colors"
+                  >
+                    <span className="text-sm font-medium text-[#6B5B4F]">
+                      {t("Advanced Options (Optional)")}
+                    </span>
+                    {showPottyAdvanced ? (
+                      <ChevronUp className="w-5 h-5 text-[#A98BB2]" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-[#A98BB2]" />
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {showPottyAdvanced && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pt-4 space-y-5">
+                          {/* Consistency */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                              {t("Stool Consistency")}
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {[
+                                { value: "firm", label: t("Firm & Formed"), emoji: "✅" },
+                                { value: "soft", label: t("Soft"), emoji: "🌤️" },
+                                { value: "watery", label: t("Watery"), emoji: "💦" },
+                                { value: "hard", label: t("Hard / Dry"), emoji: "🪨" },
+                              ].map((consistency) => (
+                                <button
+                                  key={consistency.value}
+                                  onClick={() => setPottyData({ ...pottyData, consistency: consistency.value })}
+                                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border transition-all ${
+                                    pottyData.consistency === consistency.value
+                                      ? "border-[#AB47BC] bg-[#F3E5F5] text-[#8E3BA0]"
+                                      : "border-[#E9D3EF] bg-[#FCF7FD] text-[#6B5B4F] hover:border-[#AB47BC]"
+                                  }`}
+                                >
+                                  <span className="text-lg">{consistency.emoji}</span>
+                                  <span className="text-xs font-medium">{consistency.label}</span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Colour */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-3">
+                              {t("Colour")}
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {[
+                                { value: "brown", label: t("Healthy Brown"), emoji: "🟤" },
+                                { value: "dark", label: t("Very Dark"), emoji: "⚫" },
+                                { value: "yellow", label: t("Yellow / Pale"), emoji: "🟡" },
+                                { value: "blood", label: t("Blood Present"), emoji: "🔴" },
+                              ].map((color) => (
+                                <button
+                                  key={color.value}
+                                  onClick={() => setPottyData({ ...pottyData, color: color.value })}
+                                  className={`flex items-center gap-2 px-3 py-2.5 rounded-xl border transition-all ${
+                                    pottyData.color === color.value
+                                      ? "border-[#AB47BC] bg-[#F3E5F5] text-[#8E3BA0]"
+                                      : "border-[#E9D3EF] bg-[#FCF7FD] text-[#6B5B4F] hover:border-[#AB47BC]"
+                                  }`}
+                                >
+                                  <span className="text-lg">{color.emoji}</span>
+                                  <span className="text-xs font-medium">{color.label}</span>
+                                </button>
+                              ))}
+                            </div>
+                            {pottyData.color === "blood" && (
+                              <p className="text-xs text-[#E57373] mt-2">
+                                {t("Blood in stool should be checked by a vet. Tap the AI Doctor for next steps.")}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* Notes */}
+                          <div>
+                            <label className="block text-sm font-medium text-[#6B5B4F] mb-2">
+                              {t("Notes")}
+                            </label>
+                            <textarea
+                              value={pottyData.notes}
+                              onChange={(e) => setPottyData({ ...pottyData, notes: e.target.value })}
+                              placeholder={t("e.g., Went by himself right after the walk...")}
+                              rows={3}
+                              className="w-full px-4 py-3 bg-[#FCF7FD] border border-[#E9D3EF] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#AB47BC] text-sm resize-none"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Submit */}
+                <button
+                  onClick={() => {
+                    setLogs((prev) => ({ ...prev, potty: prev.potty + 1 }));
+                    setPetMood("happy");
+                    setIsPottyModalOpen(false);
+                    setShowPottyAdvanced(false);
+                    setPottyData({
+                      time: "",
+                      type: "",
+                      location: "",
+                      consistency: "",
+                      color: "",
+                      notes: "",
+                    });
+                  }}
+                  disabled={!pottyData.time || !pottyData.type || !pottyData.location}
+                  className="w-full bg-gradient-to-r from-[#AB47BC] to-[#CE93D8] text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <Footprints className="w-5 h-5" />
+                  {t("Save Potty Record")}
                 </button>
               </div>
             </motion.div>

@@ -4,6 +4,7 @@ import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router";
 import aiDoctorImage from "../../../assets/aec2c9b15174a8e2b44b7db9dc41e225cd83f842.png";
+import { useLanguage } from "../../i18n";
 
 interface CalendarDay {
   day: number;
@@ -14,6 +15,7 @@ interface CalendarDay {
 }
 
 export function FeedingGuideScreen() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [currentMonth, setCurrentMonth] = useState(2); // March (0-indexed)
   const [showTrainingPlan, setShowTrainingPlan] = useState(false);
@@ -87,8 +89,8 @@ export function FeedingGuideScreen() {
     <div className="min-h-full bg-gradient-to-b from-[#F7F5F2] to-[#FFF9F0]">
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
-        <h1 className="text-2xl font-medium text-[#8B7355]">Feeding Guide</h1>
-        <p className="text-sm text-[#B8A89A] mt-1">Track Mochi's journey and training</p>
+        <h1 className="text-2xl font-medium text-[#8B7355]">{t("Feeding Guide")}</h1>
+        <p className="text-sm text-[#B8A89A] mt-1">{t("Track Mochi's journey and training")}</p>
       </div>
 
       {/* AI Doctor Recommendation */}
@@ -97,12 +99,11 @@ export function FeedingGuideScreen() {
           {/* Chat bubble */}
           <div className="bg-[#EAF3FF] rounded-3xl rounded-br-sm p-3.5 shadow-sm border border-[#D4E7FF] flex-1">
             <p className="text-xs text-[#5B7A9E] leading-relaxed mb-2">
-              <span className="font-semibold">Recommended Training:</span> Start teaching Mochi to "Sit"!
-              It's a foundational skill that makes other training easier.
+              <span className="font-semibold">{t("Recommended Training:")}</span> {t("Start teaching Mochi to \"Sit\"! It's a foundational skill that makes other training easier.")}
             </p>
             <div className="flex items-center gap-2 text-xs text-[#5B7A9E]">
-              <span>Duration: 7-14 days</span>
-              <span>Difficulty: Beginner</span>
+              <span>{t("Duration: 7-14 days")}</span>
+              <span>{t("Difficulty: Beginner")}</span>
             </div>
           </div>
           
@@ -140,7 +141,7 @@ export function FeedingGuideScreen() {
               <ChevronLeft className="w-5 h-5 text-[#8B7355]" />
             </button>
             <h2 className="text-lg font-medium text-[#8B7355]">
-              {monthNames[currentMonth]} {currentYear}
+              {t(monthNames[currentMonth])} {currentYear}
             </h2>
             <button
               onClick={handleNextMonth}
@@ -154,7 +155,7 @@ export function FeedingGuideScreen() {
           <div className="grid grid-cols-7 gap-1 mb-2">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
               <div key={day} className="text-center text-xs font-medium text-[#B8A89A] py-2">
-                {day}
+                {t(day)}
               </div>
             ))}
           </div>
@@ -191,15 +192,15 @@ export function FeedingGuideScreen() {
           <div className="flex items-center gap-4 mt-4 pt-4 border-t border-gray-100 text-xs">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 bg-[#FF9F66] rounded"></div>
-              <span className="text-[#8B7355]">Today</span>
+              <span className="text-[#8B7355]">{t("Today")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 bg-[#FFE8D6] rounded"></div>
-              <span className="text-[#8B7355]">Birthday</span>
+              <span className="text-[#8B7355]">{t("Birthday")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 bg-[#E3F2FD] rounded"></div>
-              <span className="text-[#8B7355]">Training</span>
+              <span className="text-[#8B7355]">{t("Training")}</span>
             </div>
           </div>
         </div>
@@ -214,12 +215,12 @@ export function FeedingGuideScreen() {
           <div className="flex items-center gap-3 mb-3">
             <div className="text-2xl">🤝</div>
             <div className="flex-1 text-left">
-              <h3 className="text-sm font-medium text-[#8B7355]">Handshake Training</h3>
-              <p className="text-xs text-[#B8A89A]">5 days completed</p>
+              <h3 className="text-sm font-medium text-[#8B7355]">{t("Handshake Training")}</h3>
+              <p className="text-xs text-[#B8A89A]">{t("5 days completed")}</p>
             </div>
             <div className="text-right">
               <p className="text-lg font-semibold text-[#FF9F66]">5</p>
-              <p className="text-xs text-[#B8A89A]">days</p>
+              <p className="text-xs text-[#B8A89A]">{t("days")}</p>
             </div>
           </div>
           <div className="w-full h-2 bg-[#F5E6D3] rounded-full overflow-hidden">
@@ -231,13 +232,13 @@ export function FeedingGuideScreen() {
       {/* Training Progress */}
       <div className="px-6 pb-4">
         <div className="bg-white rounded-3xl p-5 shadow-sm">
-          <h3 className="text-lg font-medium text-[#8B7355] mb-4">Training Progress</h3>
+          <h3 className="text-lg font-medium text-[#8B7355] mb-4">{t("Training Progress")}</h3>
           <div className="space-y-3">
             {[
-              { skill: "Sit", progress: 80, emoji: "🪑" },
-              { skill: "Stay", progress: 45, emoji: "✋" },
-              { skill: "Come", progress: 60, emoji: "🔔" },
-              { skill: "Handshake", progress: 35, emoji: "🤝" },
+              { skill: t("Sit"), progress: 80, emoji: "🪑" },
+              { skill: t("Stay"), progress: 45, emoji: "✋" },
+              { skill: t("Come"), progress: 60, emoji: "🔔" },
+              { skill: t("Handshake"), progress: 35, emoji: "🤝" },
             ].map((item, index) => (
               <div key={index}>
                 <div className="flex items-center justify-between text-sm mb-2">
@@ -266,8 +267,8 @@ export function FeedingGuideScreen() {
           className="flex-1 bg-white rounded-3xl p-5 shadow-sm hover:shadow-md transition-all border border-gray-100"
         >
           <div className="text-3xl mb-2">📦</div>
-          <h3 className="text-sm font-medium text-[#8B7355] mb-1">Preparation</h3>
-          <p className="text-xs text-[#B8A89A]">Essential checklist & tips</p>
+          <h3 className="text-sm font-medium text-[#8B7355] mb-1">{t("Preparation")}</h3>
+          <p className="text-xs text-[#B8A89A]">{t("Essential checklist & tips")}</p>
         </button>
 
         <button
@@ -275,8 +276,8 @@ export function FeedingGuideScreen() {
           className="flex-1 bg-white rounded-3xl p-5 shadow-sm hover:shadow-md transition-all border border-gray-100"
         >
           <div className="text-3xl mb-2">🎓</div>
-          <h3 className="text-sm font-medium text-[#8B7355] mb-1">Training</h3>
-          <p className="text-xs text-[#B8A89A]">Skills & progress tracking</p>
+          <h3 className="text-sm font-medium text-[#8B7355] mb-1">{t("Training")}</h3>
+          <p className="text-xs text-[#B8A89A]">{t("Skills & progress tracking")}</p>
         </button>
       </div>
 
@@ -290,8 +291,8 @@ export function FeedingGuideScreen() {
                 <div className="flex items-center gap-3">
                   <div className="text-3xl">🤝</div>
                   <div>
-                    <h2 className="text-xl font-semibold">Handshake Training</h2>
-                    <p className="text-sm opacity-90">AI Generated Plan</p>
+                    <h2 className="text-xl font-semibold">{t("Handshake Training")}</h2>
+                    <p className="text-sm opacity-90">{t("AI Generated Plan")}</p>
                   </div>
                 </div>
                 <button
@@ -302,9 +303,9 @@ export function FeedingGuideScreen() {
                 </button>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <span>Day 5/14</span>
+                <span>{t("Day 5/14")}</span>
                 <span>•</span>
-                <span>35% Complete</span>
+                <span>{t("35% Complete")}</span>
               </div>
             </div>
 
@@ -314,24 +315,24 @@ export function FeedingGuideScreen() {
               <div className="bg-gradient-to-br from-[#EAF3FF] to-[#E3F2FD] rounded-3xl p-5">
                 <h3 className="font-semibold text-[#5B7A9E] mb-3 flex items-center gap-2">
                   <span className="text-xl">🎯</span>
-                  Training Overview
+                  {t("Training Overview")}
                 </h3>
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   <div className="bg-white/80 rounded-xl p-3">
-                    <p className="text-xs text-[#B8A89A] mb-1">Duration</p>
-                    <p className="font-semibold text-[#6B5B4F]">14 Days</p>
+                    <p className="text-xs text-[#B8A89A] mb-1">{t("Duration")}</p>
+                    <p className="font-semibold text-[#6B5B4F]">{t("14 Days")}</p>
                   </div>
                   <div className="bg-white/80 rounded-xl p-3">
-                    <p className="text-xs text-[#B8A89A] mb-1">Sessions/Day</p>
-                    <p className="font-semibold text-[#6B5B4F]">3-5 times</p>
+                    <p className="text-xs text-[#B8A89A] mb-1">{t("Sessions/Day")}</p>
+                    <p className="font-semibold text-[#6B5B4F]">{t("3-5 times")}</p>
                   </div>
                   <div className="bg-white/80 rounded-xl p-3">
-                    <p className="text-xs text-[#B8A89A] mb-1">Session Length</p>
-                    <p className="font-semibold text-[#6B5B4F]">5-10 min</p>
+                    <p className="text-xs text-[#B8A89A] mb-1">{t("Session Length")}</p>
+                    <p className="font-semibold text-[#6B5B4F]">{t("5-10 min")}</p>
                   </div>
                   <div className="bg-white/80 rounded-xl p-3">
-                    <p className="text-xs text-[#B8A89A] mb-1">Difficulty</p>
-                    <p className="font-semibold text-[#6B5B4F]">Beginner</p>
+                    <p className="text-xs text-[#B8A89A] mb-1">{t("Difficulty")}</p>
+                    <p className="font-semibold text-[#6B5B4F]">{t("Beginner")}</p>
                   </div>
                 </div>
               </div>
@@ -340,13 +341,13 @@ export function FeedingGuideScreen() {
               <div>
                 <h3 className="font-semibold text-[#6B5B4F] mb-4 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-[#FF9F66]" />
-                  Daily Training Schedule
+                  {t("Daily Training Schedule")}
                 </h3>
                 <div className="space-y-3">
                   {[
-                    { time: "8:00 AM", label: "Morning Session", desc: "After breakfast, when Mochi is energetic" },
-                    { time: "1:00 PM", label: "Afternoon Session", desc: "Before afternoon nap" },
-                    { time: "6:00 PM", label: "Evening Session", desc: "Before dinner time" },
+                    { time: t("8:00 AM"), label: t("Morning Session"), desc: t("After breakfast, when Mochi is energetic") },
+                    { time: t("1:00 PM"), label: t("Afternoon Session"), desc: t("Before afternoon nap") },
+                    { time: t("6:00 PM"), label: t("Evening Session"), desc: t("Before dinner time") },
                   ].map((session, index) => (
                     <div key={index} className="bg-[#FFF9F0] rounded-2xl p-4 border border-[#E8D5BF]">
                       <div className="flex items-center gap-3 mb-2">
@@ -371,7 +372,7 @@ export function FeedingGuideScreen() {
               <div>
                 <h3 className="font-semibold text-[#6B5B4F] mb-4 flex items-center gap-2">
                   <Utensils className="w-5 h-5 text-[#FF9F66]" />
-                  Food-Based Training Method
+                  {t("Food-Based Training Method")}
                 </h3>
                 <div className="bg-gradient-to-br from-[#FFF9F0] to-[#FFE8D6] rounded-3xl p-5 space-y-4">
                   <div className="flex items-start gap-3">
@@ -379,8 +380,8 @@ export function FeedingGuideScreen() {
                       1
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-[#6B5B4F] mb-1">Hold treat in closed fist</h4>
-                      <p className="text-sm text-[#A08B7E]">Let Mochi smell the treat but don't open your hand yet</p>
+                      <h4 className="font-medium text-[#6B5B4F] mb-1">{t("Hold treat in closed fist")}</h4>
+                      <p className="text-sm text-[#A08B7E]">{t("Let Mochi smell the treat but don't open your hand yet")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -388,8 +389,8 @@ export function FeedingGuideScreen() {
                       2
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-[#6B5B4F] mb-1">Present your hand and say \"Shake\"</h4>
-                      <p className="text-sm text-[#A08B7E]">Wait for Mochi to paw at your hand</p>
+                      <h4 className="font-medium text-[#6B5B4F] mb-1">{t("Present your hand and say \"Shake\"")}</h4>
+                      <p className="text-sm text-[#A08B7E]">{t("Wait for Mochi to paw at your hand")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -397,8 +398,8 @@ export function FeedingGuideScreen() {
                       3
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-[#6B5B4F] mb-1">Reward immediately</h4>
-                      <p className="text-sm text-[#A08B7E]">Open your hand and give the treat + praise enthusiastically!</p>
+                      <h4 className="font-medium text-[#6B5B4F] mb-1">{t("Reward immediately")}</h4>
+                      <p className="text-sm text-[#A08B7E]">{t("Open your hand and give the treat + praise enthusiastically!")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -406,8 +407,8 @@ export function FeedingGuideScreen() {
                       4
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-medium text-[#6B5B4F] mb-1">Repeat 5-10 times per session</h4>
-                      <p className="text-sm text-[#A08B7E]">Keep sessions short and fun to maintain interest</p>
+                      <h4 className="font-medium text-[#6B5B4F] mb-1">{t("Repeat 5-10 times per session")}</h4>
+                      <p className="text-sm text-[#A08B7E]">{t("Keep sessions short and fun to maintain interest")}</p>
                     </div>
                   </div>
                 </div>
@@ -417,11 +418,11 @@ export function FeedingGuideScreen() {
                   <div className="flex items-start gap-2">
                     <span className="text-xl">💡</span>
                     <div className="flex-1">
-                      <h4 className="font-medium text-[#8B7355] mb-1">Treat Tips</h4>
+                      <h4 className="font-medium text-[#8B7355] mb-1">{t("Treat Tips")}</h4>
                       <ul className="text-sm text-[#A08B7E] space-y-1">
-                        <li>• Use small, soft treats that are easy to chew</li>
-                        <li>• Keep treats at room temperature for better scent</li>
-                        <li>• Limit to 10% of daily calorie intake</li>
+                        <li>{t("• Use small, soft treats that are easy to chew")}</li>
+                        <li>{t("• Keep treats at room temperature for better scent")}</li>
+                        <li>{t("• Limit to 10% of daily calorie intake")}</li>
                       </ul>
                     </div>
                   </div>
@@ -430,7 +431,7 @@ export function FeedingGuideScreen() {
 
               {/* 14-Day Progress Tracker */}
               <div>
-                <h3 className="font-semibold text-[#6B5B4F] mb-4">14-Day Check-in Tracker</h3>
+                <h3 className="font-semibold text-[#6B5B4F] mb-4">{t("14-Day Check-in Tracker")}</h3>
                 <div className="grid grid-cols-7 gap-2">
                   {Array.from({ length: 14 }).map((_, index) => {
                     const dayNum = index + 1;
@@ -470,7 +471,7 @@ export function FeedingGuideScreen() {
               {/* Check-in Button */}
               <button className="w-full bg-gradient-to-r from-[#81C784] to-[#66BB6A] text-white font-semibold py-4 rounded-2xl hover:shadow-lg transition-all flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-5 h-5" />
-                Check In Today's Training
+                {t("Check In Today's Training")}
               </button>
             </div>
           </div>

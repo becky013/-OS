@@ -15,8 +15,10 @@ import eventsIcon from "../../../imports/ChatGPT_Image_Apr_19,_2026,_01_40_35_AM
 import findIcon from "../../../imports/ChatGPT_Image_Apr_19,_2026,_01_40_35_AM_4.png";
 import lostPetsIcon from "../../../imports/ChatGPT_Image_Apr_19,_2026,_01_40_35_AM_5.png";
 import adoptionIcon from "../../../imports/ChatGPT_Image_Apr_19,_2026,_01_40_35_AM_6.png";
+import { useLanguage } from "../../i18n";
 
 export function CommunityScreen() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<"recommend" | "events" | "find" | "lost" | "adoption">(
     "recommend"
   );
@@ -24,31 +26,31 @@ export function CommunityScreen() {
   const menuItems = [
     {
       id: "recommend",
-      label: "Recommend",
+      label: t("Recommend"),
       icon: "📱",
       image: recommendIcon,
     },
     {
       id: "events",
-      label: "Events",
+      label: t("Events"),
       icon: "📅",
       image: eventsIcon,
     },
     {
       id: "find",
-      label: "Find",
+      label: t("Find"),
       icon: "🗺️",
       image: findIcon,
     },
     {
       id: "lost",
-      label: "Lost Pets",
+      label: t("Lost Pets"),
       icon: "🔔",
       image: lostPetsIcon,
     },
     {
       id: "adoption",
-      label: "Adoption",
+      label: t("Adoption"),
       icon: "❤️",
       image: adoptionIcon,
     },
@@ -58,14 +60,14 @@ export function CommunityScreen() {
     <div className="min-h-full bg-[#FFF9F0]">
       {/* Header */}
       <div className="bg-white px-4 py-6 shadow-sm">
-        <h1 className="text-2xl font-semibold text-[#6B5B4F] mb-3">Community</h1>
+        <h1 className="text-2xl font-semibold text-[#6B5B4F] mb-3">{t("Community")}</h1>
         
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#A08B7E]" />
           <input
             type="text"
-            placeholder="Search posts, events, pets..."
+            placeholder={t("Search posts, events, pets...")}
             className="w-full pl-10 pr-4 py-3 bg-[#FFF9F0] rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9F66]"
           />
         </div>
@@ -110,12 +112,13 @@ export function CommunityScreen() {
 }
 
 function RecommendContent() {
+  const { t } = useLanguage();
   const posts = [
     {
       id: 1,
       user: { name: "Emma Wilson", avatar: "👩" },
-      time: "2 hours ago",
-      content: "Milo learned to sit today! So proud of my little guy 🥹",
+      time: t("2 hours ago"),
+      content: t("Milo learned to sit today! So proud of my little guy 🥹"),
       hashtags: ["#puppygrowth", "#trainingchallenge"],
       image: "https://images.unsplash.com/photo-1651212508936-dfb6f6ea3d81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMGdvbGRlbiUyMHJldHJpZXZlciUyMHB1cHB5fGVufDF8fHx8MTc3NTI3NTYwNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       likes: 127,
@@ -124,8 +127,8 @@ function RecommendContent() {
     {
       id: 2,
       user: { name: "Sarah Chen", avatar: "👩" },
-      time: "5 hours ago",
-      content: "Luna's first visit to the dog park! She made so many friends 🐕",
+      time: t("5 hours ago"),
+      content: t("Luna's first visit to the dog park! She made so many friends 🐕"),
       hashtags: ["#puppygrowth", "#dogpark"],
       image: "https://images.unsplash.com/photo-1764942988847-bdc223f6391a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb2clMjBwYXJrJTIwb3V0ZG9vcnxlbnwxfHx8fDE3NzUzODEzNzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       likes: 89,
@@ -137,7 +140,7 @@ function RecommendContent() {
     <div className="space-y-4">
       {/* Post Button */}
       <button className="w-full bg-[#FF9F66] text-white font-medium py-3 rounded-2xl hover:bg-[#FF8A4D] transition-colors shadow-sm">
-        Share Your Pet's Story
+        {t("Share Your Pet's Story")}
       </button>
 
       {/* Posts */}
@@ -162,7 +165,7 @@ function RecommendContent() {
                 key={index}
                 className="text-xs text-[#64B5F6] bg-[#E3F2FD] px-2 py-1 rounded-full"
               >
-                {tag}
+                {t(tag)}
               </span>
             ))}
           </div>
@@ -197,38 +200,39 @@ function RecommendContent() {
 }
 
 function EventsContent() {
+  const { t } = useLanguage();
   const events = [
     {
       id: 1,
-      title: "Pet School: Basic Training",
-      date: "April 12, 2026",
-      time: "10:00 AM - 12:00 PM",
-      location: "Central Park - North Meadow",
+      title: t("Pet School: Basic Training"),
+      date: t("April 12, 2026"),
+      time: t("10:00 AM - 12:00 PM"),
+      location: t("Central Park - North Meadow"),
       attendees: 24,
       maxAttendees: 30,
-      category: "Training",
+      category: t("Training"),
       emoji: "🎓",
     },
     {
       id: 2,
-      title: "Puppy Playdate Social",
-      date: "April 15, 2026",
-      time: "2:00 PM - 4:00 PM",
-      location: "Riverside Dog Park",
+      title: t("Puppy Playdate Social"),
+      date: t("April 15, 2026"),
+      time: t("2:00 PM - 4:00 PM"),
+      location: t("Riverside Dog Park"),
       attendees: 18,
       maxAttendees: 25,
-      category: "Social",
+      category: t("Social"),
       emoji: "🐾",
     },
     {
       id: 3,
-      title: "Pet Care Workshop",
-      date: "April 20, 2026",
-      time: "6:00 PM - 8:00 PM",
-      location: "Pet Haven Community Center",
+      title: t("Pet Care Workshop"),
+      date: t("April 20, 2026"),
+      time: t("6:00 PM - 8:00 PM"),
+      location: t("Pet Haven Community Center"),
       attendees: 12,
       maxAttendees: 20,
-      category: "Workshop",
+      category: t("Workshop"),
       emoji: "🏥",
     },
   ];
@@ -265,7 +269,7 @@ function EventsContent() {
                   {event.attendees}/{event.maxAttendees} attending
                 </span>
                 <button className="bg-[#FF9F66] text-white text-sm font-medium py-2 px-4 rounded-xl hover:bg-[#FF8A4D] transition-colors">
-                  Sign Up
+                  {t("Sign Up")}
                 </button>
               </div>
             </div>
@@ -277,76 +281,77 @@ function EventsContent() {
 }
 
 function FindContent() {
+  const { t } = useLanguage();
   const [selectedPlace, setSelectedPlace] = useState<number | null>(null);
 
   const places = [
     {
       id: 1,
-      name: "WEST BUND",
-      type: "Dog Park",
+      name: t("WEST BUND"),
+      type: t("Dog Park"),
       rating: 4.8,
       distance: "0.5 km",
-      rules: "Leash required until inside",
+      rules: t("Leash required until inside"),
       emoji: "🛝",
       coordinates: { lat: 31.1637, lng: 121.4543 },
       reviews: [
         {
           user: "Mike Johnson",
           rating: 5,
-          comment: "Perfect for puppies! Very clean and well-maintained. Mochi loves playing here!",
-          date: "2 days ago",
+          comment: t("Perfect for puppies! Very clean and well-maintained. Mochi loves playing here!"),
+          date: t("2 days ago"),
           petFriendly: true,
         },
         {
           user: "Lisa Wang",
           rating: 4,
-          comment: "Great space but can get crowded on weekends. Best time is early morning.",
-          date: "1 week ago",
+          comment: t("Great space but can get crowded on weekends. Best time is early morning."),
+          date: t("1 week ago"),
           petFriendly: true,
         },
         {
           user: "Tom Brown",
           rating: 5,
-          comment: "Excellent facilities with separate areas for small and large dogs. Highly recommend!",
-          date: "2 weeks ago",
+          comment: t("Excellent facilities with separate areas for small and large dogs. Highly recommend!"),
+          date: t("2 weeks ago"),
           petFriendly: true,
         },
       ],
     },
     {
       id: 2,
-      name: "Paws & Coffee",
-      type: "Pet-Friendly Cafe",
+      name: t("Paws & Coffee"),
+      type: t("Pet-Friendly Cafe"),
       rating: 4.9,
       distance: "1.2 km",
-      rules: "Outdoor seating only",
+      rules: t("Outdoor seating only"),
       emoji: "☕",
       coordinates: { lat: 31.1700, lng: 121.4600 },
       reviews: [
         {
           user: "Emma Davis",
           rating: 5,
-          comment: "Love this place! They have water bowls and treats for pets. Staff is super friendly.",
-          date: "3 days ago",
+          comment: t("Love this place! They have water bowls and treats for pets. Staff is super friendly."),
+          date: t("3 days ago"),
           petFriendly: true,
         },
       ],
     },
     {
       id: 3,
-      name: "Pet Paradise Store",
-      type: "Pet Store",
+      name: t("Pet Paradise Store"),
+      type: t("Pet Store"),
       rating: 4.7,
       distance: "0.8 km",
-      rules: "All pets welcome",
+      rules: t("All pets welcome"),
       emoji: "🏪",
       coordinates: { lat: 31.1580, lng: 121.4500 },
       reviews: [
         {
           user: "Sarah Chen",
           rating: 4,
-          comment: "Good selection of products. Prices are reasonable.",
-          date: "5 days ago",
+          comment: t("Good selection of products. Prices are reasonable."),
+          date: t("5 days ago"),
           petFriendly: true,
         },
       ],
@@ -382,7 +387,7 @@ function FindContent() {
         {/* Map labels */}
         <div className="absolute top-4 left-4 bg-white px-3 py-2 rounded-xl shadow-sm text-xs font-medium text-[#8B7355] flex items-center gap-1.5">
           <MapPin className="w-3.5 h-3.5 text-[#FF6B6B]" />
-          Shanghai
+          {t("Shanghai")}
         </div>
 
         {/* Zoom controls */}
@@ -410,7 +415,7 @@ function FindContent() {
                 <MapPin className="w-12 h-12 text-[#FF6B6B] fill-[#FF6B6B] drop-shadow-lg" />
               </div>
               <div className="bg-white px-3 py-1.5 rounded-full shadow-md text-xs font-medium text-[#6B5B4F] whitespace-nowrap mt-2 border border-gray-200">
-                🛝 WEST BUND
+                {t("🛝 WEST BUND")}
               </div>
             </button>
           </div>
@@ -436,10 +441,10 @@ function FindContent() {
 
         {/* Street labels (Google Maps style) */}
         <div className="absolute bottom-1/2 left-1/4 text-[10px] font-medium text-[#5F6368] opacity-60 transform -rotate-12">
-          Longteng Ave
+          {t("Longteng Ave")}
         </div>
         <div className="absolute top-1/3 right-1/2 text-[10px] font-medium text-[#5F6368] opacity-60">
-          Ruining Rd
+          {t("Ruining Rd")}
         </div>
       </div>
 
@@ -463,7 +468,7 @@ function FindContent() {
                   </div>
                 </div>
 
-                <h4 className="font-semibold text-[#6B5B4F] mb-3">User Reviews</h4>
+                <h4 className="font-semibold text-[#6B5B4F] mb-3">{t("User Reviews")}</h4>
                 <div className="space-y-3">
                   {place.reviews.map((review, index) => (
                     <div
@@ -494,7 +499,7 @@ function FindContent() {
                       {review.petFriendly && (
                         <div className="flex items-center gap-2">
                           <span className="text-xs bg-[#E3F2FD] text-[#64B5F6] px-2 py-1 rounded-full">
-                            ✓ Pet Friendly
+                            {t("✓ Pet Friendly")}
                           </span>
                         </div>
                       )}
@@ -503,14 +508,14 @@ function FindContent() {
                 </div>
 
                 <button className="w-full mt-4 bg-[#FF9F66] text-white font-medium py-3 rounded-xl hover:bg-[#FF8A4D] transition-colors">
-                  Add Your Review
+                  {t("Add Your Review")}
                 </button>
               </div>
             ))}
         </div>
       )}
 
-      <h2 className="text-lg font-semibold text-[#6B5B4F]">Nearby Places</h2>
+      <h2 className="text-lg font-semibold text-[#6B5B4F]">{t("Nearby Places")}</h2>
 
       {places.map((place) => (
         <button
@@ -542,15 +547,16 @@ function FindContent() {
 }
 
 function LostPetsContent() {
+  const { t } = useLanguage();
   const lostPets = [
     {
       id: 1,
       name: "Max",
-      type: "Golden Retriever",
-      lastSeen: "Downtown - 5th Ave",
-      time: "3 hours ago",
+      type: t("Golden Retriever"),
+      lastSeen: t("Downtown - 5th Ave"),
+      time: t("3 hours ago"),
       distance: "1.2 miles away",
-      contact: "Contact Sarah",
+      contact: t("Contact Sarah"),
       image: "https://images.unsplash.com/photo-1651212508936-dfb6f6ea3d81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMGdvbGRlbiUyMHJldHJpZXZlciUyMHB1cHB5fGVufDF8fHx8MTc3NTI3NTYwNHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
     },
   ];
@@ -562,12 +568,12 @@ function LostPetsContent() {
         <div className="flex items-start gap-3">
           <AlertCircle className="w-6 h-6 text-[#FF9F66] shrink-0" />
           <div className="flex-1">
-            <h3 className="font-semibold text-[#6B5B4F] mb-1">Help Find Lost Pets</h3>
+            <h3 className="font-semibold text-[#6B5B4F] mb-1">{t("Help Find Lost Pets")}</h3>
             <p className="text-sm text-[#A08B7E] mb-3">
-              Enable location to see lost pets near you
+              {t("Enable location to see lost pets near you")}
             </p>
             <button className="bg-[#FF9F66] text-white text-sm font-medium py-2 px-4 rounded-xl hover:bg-[#FF8A4D] transition-colors">
-              Enable Location
+              {t("Enable Location")}
             </button>
           </div>
         </div>
@@ -575,7 +581,7 @@ function LostPetsContent() {
 
       {/* Post Lost Pet Button */}
       <button className="w-full bg-white text-[#FF9F66] font-medium py-3 rounded-2xl border-2 border-[#FF9F66] hover:bg-[#FFF9F0] transition-colors">
-        Report Lost Pet
+        {t("Report Lost Pet")}
       </button>
 
       {/* Lost Pets */}
@@ -596,7 +602,7 @@ function LostPetsContent() {
                   <p className="text-sm text-[#A08B7E]">{pet.type}</p>
                 </div>
                 <span className="text-xs bg-[#FFE8D6] text-[#FF9F66] px-2 py-1 rounded-full">
-                  URGENT
+                  {t("URGENT")}
                 </span>
               </div>
               <div className="space-y-1 mb-3">
@@ -618,15 +624,16 @@ function LostPetsContent() {
 }
 
 function AdoptionContent() {
+  const { t } = useLanguage();
   const adoptionPets = [
     {
       id: 1,
       name: "Bella",
-      type: "Mixed Breed",
-      age: "8 months",
-      gender: "Female",
-      organization: "Happy Paws Rescue",
-      location: "Downtown Shelter",
+      type: t("Mixed Breed"),
+      age: t("8 months"),
+      gender: t("Female"),
+      organization: t("Happy Paws Rescue"),
+      location: t("Downtown Shelter"),
       image: "https://images.unsplash.com/photo-1769634847839-64142e1dd4c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZXQlMjBhZG9wdGlvbiUyMHNoZWx0ZXJ8ZW58MXx8fHwxNzc1MzgxMzczfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
       traits: ["Friendly", "Vaccinated", "House-trained"],
     },
@@ -656,7 +663,7 @@ function AdoptionContent() {
                   key={index}
                   className="text-xs bg-[#E3F2FD] text-[#64B5F6] px-3 py-1 rounded-full"
                 >
-                  {trait}
+                  {t(trait)}
                 </span>
               ))}
             </div>
@@ -669,10 +676,10 @@ function AdoptionContent() {
 
           <div className="flex gap-2">
             <button className="flex-1 bg-[#FF9F66] text-white font-medium py-3 rounded-xl hover:bg-[#FF8A4D] transition-colors">
-              Adopt
+              {t("Adopt")}
             </button>
             <button className="flex-1 bg-[#F5E6D3] text-[#6B5B4F] font-medium py-3 rounded-xl hover:bg-[#E8D5BF] transition-colors">
-              Share
+              {t("Share")}
             </button>
           </div>
         </div>

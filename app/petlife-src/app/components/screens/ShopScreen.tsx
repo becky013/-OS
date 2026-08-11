@@ -3,49 +3,51 @@ import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { useState } from "react";
 import productImage from "../../../imports/250520_proplan-puppy_shred_chicken_rice_1080_01_1-1.png";
 import probioticsImage from "../../../imports/IMG_0578_1.png";
+import { useLanguage } from "../../i18n";
 
 export function ShopScreen() {
+  const { t } = useLanguage();
   const [cart, setCart] = useState<Record<number, number>>({});
 
   const products = [
     {
       id: 1,
-      name: "Puppy Premium Plus",
-      category: "Puppy Food",
-      age: "2-6 months",
+      name: t("Puppy Premium Plus"),
+      category: t("Puppy Food"),
+      age: t("2-6 months"),
       price: 120,
       originalPrice: 160,
       discount: 25,
       rating: 4.8,
       reviews: 342,
       image: productImage,
-      badge: "Best for Mochi",
+      badge: t("Best for Mochi"),
     },
     {
       id: 2,
-      name: "Probiotics",
-      category: "Supplement",
-      age: "All ages",
+      name: t("Probiotics"),
+      category: t("Supplement"),
+      age: t("All ages"),
       price: 450,
       originalPrice: 590,
       discount: 24,
       rating: 4.9,
       reviews: 521,
       image: probioticsImage,
-      badge: "Popular",
+      badge: t("Popular"),
     },
     {
       id: 3,
-      name: "Puppy Growth Formula",
-      category: "Puppy Food",
-      age: "6-12 months",
+      name: t("Puppy Growth Formula"),
+      category: t("Puppy Food"),
+      age: t("6-12 months"),
       price: 155,
       originalPrice: 199,
       discount: 22,
       rating: 4.7,
       reviews: 289,
       image: "https://images.unsplash.com/photo-1697422836692-043e0fee1fd5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcmVtaXVtJTIwZG9nJTIwZm9vZCUyMGtpYmJsZXxlbnwxfHx8fDE3NzUyNzUxNjB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-      badge: "New",
+      badge: t("New"),
     },
   ];
 
@@ -83,9 +85,9 @@ export function ShopScreen() {
     <div className="min-h-full bg-[#FFF9F0]">
       {/* Header */}
       <div className="bg-white px-4 py-6 shadow-sm">
-        <h1 className="text-2xl font-semibold text-[#6B5B4F]">Proplan Shop</h1>
+        <h1 className="text-2xl font-semibold text-[#6B5B4F]">{t("Proplan Shop")}</h1>
         <p className="text-sm text-[#A08B7E]">
-          Personalized recommendations for Mochi
+          {t("Personalized recommendations for Mochi")}
         </p>
       </div>
 
@@ -95,14 +97,14 @@ export function ShopScreen() {
           <div className="flex items-center gap-3 mb-3">
             <Heart className="w-8 h-8 fill-white" />
             <div className="flex-1">
-              <h2 className="font-semibold mb-1">Support Rescue Animals</h2>
+              <h2 className="font-semibold mb-1">{t("Support Rescue Animals")}</h2>
               <p className="text-sm opacity-90">
-                Convert your purchases into donations for shelters
+                {t("Convert your purchases into donations for shelters")}
               </p>
             </div>
           </div>
           <button className="w-full bg-white text-[#66BB6A] font-medium py-3 rounded-2xl hover:bg-opacity-90 transition-colors">
-            Learn More
+            {t("Learn More")}
           </button>
         </div>
 
@@ -114,17 +116,17 @@ export function ShopScreen() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-[#6B5B4F] mb-1">
-                Monthly Subscription
+                {t("Monthly Subscription")}
               </h3>
               <p className="text-sm text-[#A08B7E] mb-2">
-                Save 15% with auto-delivery
+                {t("Save 15% with auto-delivery")}
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-xs bg-[#FFD166] text-[#6B5B4F] px-2 py-1 rounded-full font-medium">
-                  Free Shipping
+                  {t("Free Shipping")}
                 </span>
                 <span className="text-xs bg-[#FFE8D6] text-[#FF9F66] px-2 py-1 rounded-full font-medium">
-                  Cancel Anytime
+                  {t("Cancel Anytime")}
                 </span>
               </div>
             </div>
@@ -134,7 +136,7 @@ export function ShopScreen() {
         {/* Products */}
         <div className="space-y-3">
           <h2 className="text-lg font-semibold text-[#6B5B4F]">
-            Recommended for You
+            {t("Recommended for You")}
           </h2>
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-2xl p-4 shadow-sm">
@@ -182,7 +184,7 @@ export function ShopScreen() {
                         </span>
                       </div>
                       <span className="text-xs bg-[#FFE8D6] text-[#FF9F66] px-2 py-0.5 rounded-full">
-                        {product.discount}% off
+                        {product.discount}% {t("off")}
                       </span>
                     </div>
                     <div className="flex items-center">
@@ -226,12 +228,12 @@ export function ShopScreen() {
         <div className="bg-gradient-to-br from-[#FFE8D6] to-[#FFF9F0] rounded-3xl p-5">
           <div className="text-center">
             <div className="text-4xl mb-2">🎁</div>
-            <h3 className="font-semibold text-[#6B5B4F] mb-1">Free Trial Available</h3>
+            <h3 className="font-semibold text-[#6B5B4F] mb-1">{t("Free Trial Available")}</h3>
             <p className="text-sm text-[#A08B7E] mb-3">
-              Try any product risk-free for 14 days
+              {t("Try any product risk-free for 14 days")}
             </p>
             <button className="bg-[#FF9F66] text-white font-medium py-2.5 px-6 rounded-full hover:bg-[#FF8A4D] transition-colors">
-              Start Free Trial
+              {t("Start Free Trial")}
             </button>
           </div>
         </div>

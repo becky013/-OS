@@ -1,16 +1,18 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Home, BookOpen, ShoppingBag, Users, User } from "lucide-react";
+import { useLanguage } from "../i18n";
 
 export function Layout() {
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
 
   const tabs = [
-    { path: "/", icon: Home, label: "Home" },
-    { path: "/feeding", icon: BookOpen, label: "Guide" },
-    { path: "/shop", icon: ShoppingBag, label: "Shop" },
-    { path: "/community", icon: Users, label: "Community" },
-    { path: "/profile", icon: User, label: "Profile" },
+    { path: "/", icon: Home, label: t("Home") },
+    { path: "/feeding", icon: BookOpen, label: t("Guide") },
+    { path: "/shop", icon: ShoppingBag, label: t("Shop") },
+    { path: "/community", icon: Users, label: t("Community") },
+    { path: "/profile", icon: User, label: t("Profile") },
   ];
 
   const isActive = (path: string) => {
